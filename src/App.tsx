@@ -22,8 +22,19 @@ function App() {
   const [randomWord, setRandomWord] = useState<WordData>();
   const [gameStage, setGameStage ] = useState(stages[0].name);
 
+  //starts the secret word game
   const startGame = () => {
     setGameStage(stages[1].name);
+  }
+
+  //process the letter input
+  const verifyLetter = () => {
+    setGameStage(stages[2].name);
+  }
+
+  //restart the game
+  const retry = () => {
+    setGameStage(stages[0].name);
   }
 
   useEffect(() => {
@@ -43,8 +54,8 @@ function App() {
   return (
     <div className="App">
       {gameStage === 'start' && <StarterScreen startGame={startGame}/>}
-      {gameStage === 'game' && <Game />}
-      {gameStage === 'end' && <EndGame />}
+      {gameStage === 'game' && <Game verifyLetter={verifyLetter} />}
+      {gameStage === 'end' && <EndGame retry={retry}/>}
     </div>
   );
 }

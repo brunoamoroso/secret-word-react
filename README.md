@@ -3,8 +3,9 @@
 ## Description
 This is a project created based on a module of the course from Hora de Codar. In this project we should show how many letters there are in the word and the user can guess which word is it.
 
-> [!NOTE]
-> [Curso Hora de Codar - React do Zero a Maestria](https://www.udemy.com/course/react-do-zero-a-maestria-c-hooks-router-api-projetos/) 
+>[!NOTE]
+>[Curso Hora de Codar - React do Zero a Maestria](https://www.udemy.com/course/react-do-zero-a-maestria-c-hooks-router-api-projetos/)
+ 
 ---
 
 ## Enhancements
