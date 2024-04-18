@@ -22,6 +22,10 @@ function App() {
   const [randomWord, setRandomWord] = useState<WordData>();
   const [gameStage, setGameStage ] = useState(stages[0].name);
 
+  const startGame = () => {
+    setGameStage(stages[1].name);
+  }
+
   useEffect(() => {
     const fetchRandomWord = async () => {
       try{
@@ -38,7 +42,7 @@ function App() {
 
   return (
     <div className="App">
-      {gameStage === 'start' && <StarterScreen />}
+      {gameStage === 'start' && <StarterScreen startGame={startGame}/>}
       {gameStage === 'game' && <Game />}
       {gameStage === 'end' && <EndGame />}
     </div>
