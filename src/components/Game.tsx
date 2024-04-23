@@ -1,11 +1,17 @@
 import * as React from 'react';
 import styles from './Game.module.css';
+import { randomWordT } from '../App';
 
-export interface IGameProps {
-  verifyLetter: () => void
+export interface IGameProps{
+  verifyLetter: () => void;
+  randomWord : randomWordT;
+  guessedLetters: string[];
+  wrongLetters: string[];
+  guesses: number;
+  score: number;
 }
 
-export default function Game ({verifyLetter}: IGameProps) {
+export default function Game ({verifyLetter, randomWord, guessedLetters, wrongLetters, guesses, score}: IGameProps) {
   return (
     <div className={styles.game}>
       <span className={styles.points}>
@@ -14,14 +20,17 @@ export default function Game ({verifyLetter}: IGameProps) {
 
       <h1>Adivinhe a palavra: </h1>
       <h3 className={styles.tip}>
-        Dica sobre a palavra: <span>Dica...</span>
+        Dica sobre a palavra: <span>{randomWord.def}</span>
       </h3>
 
       <div className={styles.wordContainer}>
-        <span className={styles.letter}>
-          A
-        </span>
-        <span className={styles.blankSquare}></span>
+          {randomWord.arrLetter.map((letter, i) => (
+            guessedLetters.includes(letter) ? (
+              <span key={i} className={styles.letter}>{letter}</span>
+            ) : (
+              <span key={i} className={styles.blankSquare}> </span>
+            )
+          ))}
       </div>
 
       <div className={styles.letterContainer}>
@@ -34,9 +43,10 @@ export default function Game ({verifyLetter}: IGameProps) {
 
       <div className={styles.wrongLettersContainer}>
         <p>Letras já utilizadas:</p>
-        <span>A,</span>
+        {wrongLetters.map((letter, i) => (
+          <span key={i}>{letter}</span>
+        ))}
       </div>
-      <button onClick={verifyLetter}>Finalizar Jogo</button>
     </div>
   );
 }
