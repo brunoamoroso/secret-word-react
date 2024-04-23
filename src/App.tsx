@@ -68,9 +68,35 @@ function App() {
   };
 
   //process the letter input
-  const verifyLetter = () => {
-    setGameStage(stages[2].name);
+  const verifyLetter = (letter: string) => {
+      const normalizedLetter = letter.toUpperCase();
+
+      //check if lettter has already been utilized
+      if(guessedLetters.includes(normalizedLetter) || wrongLetters.includes(normalizedLetter)){
+        return;
+      }
+
+      //push guessed letter or remove a guess
+      if(randomWord.arrLetter.includes(normalizedLetter)){
+        setGuessedLetters((actualGuessedLetters) => [...actualGuessedLetters, normalizedLetter]);
+      }else{
+        setWrongLetters((actualWrongLetters) => [...actualWrongLetters, normalizedLetter]);
+      }
+
+      setGuesses((actualGuesses) => actualGuesses - 1);
   };
+
+  useEffect(() => {
+    if(guesses <= 0){
+      //reset all states
+      
+
+      setGameStage(stages[2].name);
+    }
+  }, [guesses])
+
+  console.log(guessedLetters);
+  console.log(wrongLetters);
 
   //restart the game
   const retry = () => {
