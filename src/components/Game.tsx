@@ -34,12 +34,14 @@ export default function Game({
 
   return (
     <div className={styles.game}>
-      <span className={styles.points}>Pontuação: 000</span>
+      <span className={styles.points}>Pontuação: {score}</span>
 
       <h1>Adivinhe a palavra: </h1>
       <h3 className={styles.tip}>
         Dica sobre a palavra: <span>{randomWord.def}</span>
       </h3>
+
+      <span>Você ainda tem {guesses} tentativas</span>
 
       <div className={styles.wordContainer}>
         {randomWord.arrLetter.map((letter, i) =>

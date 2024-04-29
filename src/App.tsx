@@ -40,7 +40,7 @@ function App() {
   const [score, setScore] = useState(0);
 
   //fetch a random word from the api
-  const fetchRandomWord = async () => {
+  const fetchRandomWord = useCallback(async () => {
     try {
       const fetchedWordData = await getRandomWord();
       let wordJson;
@@ -54,18 +54,24 @@ function App() {
       const defWord = wordJson.entry.sense.def._text;
       const arrLetter = newWord.toUpperCase().split("");
       setRandomWord({ word: newWord, def: defWord, arrLetter: arrLetter });
+
+      console.log(newWord);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, []);
 
-  useEffect(() => {}, []);
+  const clearLetterStates = () => {
+    setGuessedLetters([]);
+    setWrongLetters([]);
+  }
 
   //starts the secret word game
-  const startGame = () => {
+  const startGame = useCallback(() => {
+    clearLetterStates();
     fetchRandomWord();
     setGameStage(stages[1].name);
-  };
+  }, [fetchRandomWord]);
 
   //process the letter input
   const verifyLetter = (letter: string) => {
@@ -81,25 +87,39 @@ function App() {
         setGuessedLetters((actualGuessedLetters) => [...actualGuessedLetters, normalizedLetter]);
       }else{
         setWrongLetters((actualWrongLetters) => [...actualWrongLetters, normalizedLetter]);
+        setGuesses((actualGuesses) => actualGuesses - 1);
       }
-
-      setGuesses((actualGuesses) => actualGuesses - 1);
   };
-
+  
   useEffect(() => {
     if(guesses <= 0){
       //reset all states
-      
+      clearLetterStates();
 
       setGameStage(stages[2].name);
     }
-  }, [guesses])
+  }, [guesses]);
 
-  console.log(guessedLetters);
-  console.log(wrongLetters);
+  //checks win condition
+  useEffect(() => {
+    const uniqueLetters = [...new Set(randomWord.arrLetter)];
+    
+    //win condition
+    if(guessedLetters.length === uniqueLetters.length){
+      //add score
+      setScore((actualScore) => (actualScore += 100));
+
+      //restart with new word
+      startGame();
+    }
+
+  }, [guessedLetters, randomWord, startGame]);
 
   //restart the game
   const retry = () => {
+    setRandomWord({word: "", def: "", arrLetter: [""]});
+    setScore(0);
+    setGuesses(3);
     setGameStage(stages[0].name);
   };
 
@@ -117,7 +137,7 @@ function App() {
           score={score}
         />
       )}
-      {gameStage === "end" && <EndGame retry={retry} />}
+      {gameStage === "end" && <EndGame retry={retry} score={score} />}
     </div>
   );
 }
